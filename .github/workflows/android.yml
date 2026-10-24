@@ -29,6 +29,11 @@ jobs:
           unzip -q Kalkulator_Baut_BY_RIZKY_ABDILAH_CLOUD_BUILD.zip -d android-project
           ls -la android-project
 
+      - name: Samakan target Java
+        run: |
+          sed -i 's/VERSION_1_8/VERSION_17/g; s/VERSION_8/VERSION_17/g' android-project/app/build.gradle
+          cat android-project/app/build.gradle
+
       - name: Build APK
         run: gradle -p android-project assembleDebug
 
