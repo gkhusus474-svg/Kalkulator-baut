@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#17191c">
+<title>Kalkulator Baut — BY RIZKY ABDILAH</title>
+<style>
+:root{--bg:#111315;--panel:#1b1e22;--panel2:#22262b;--line:#343a42;--text:#f4f5f6;--muted:#a8afb8;--yellow:#f6c744;--green:#67d39a;--red:#ff7777}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:22px 18px 18px;background:linear-gradient(135deg,#202429,#111315);border-bottom:1px solid var(--line)}
+.brand{font-size:11px;letter-spacing:2.4px;color:var(--yellow);font-weight:800}.title{font-size:24px;font-weight:850;margin:5px 0 2px}.subtitle{font-size:12px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:6px;margin-top:14px;border:1px solid #454b52;border-radius:99px;padding:6px 10px;font-size:11px;color:#d9dde1}.dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px;background:#151719;position:sticky;top:0;z-index:2;border-bottom:1px solid var(--line)}
+nav button{border:1px solid transparent;background:transparent;color:var(--muted);padding:11px 5px;border-radius:10px;font-weight:750;font-size:12px}nav button.active{background:var(--yellow);color:#171717}
+main{max-width:720px;margin:auto;padding:14px 14px 38px}.page{display:none}.page.active{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:13px;box-shadow:0 8px 24px #0002}
+h2{font-size:16px;margin:0 0 4px} .hint{font-size:12px;color:var(--muted);margin-bottom:15px;line-height:1.45}
+label{display:block;font-size:12px;color:#d4d8dd;margin:12px 0 6px;font-weight:700}
+input,select{width:100%;border:1px solid #414750;background:#121416;color:var(--text);padding:13px 12px;border-radius:10px;font-size:15px;outline:none}input:focus,select:focus{border-color:var(--yellow)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{border:0;background:var(--yellow);color:#171717;padding:13px 14px;border-radius:11px;font-size:14px;font-weight:850;width:100%;margin-top:14px}.btn.secondary{background:#30353b;color:#fff;border:1px solid #4a5058}.btn.danger{background:#49282a;color:#ffc1c1;border:1px solid #774044}
+.result{background:#101214;border:1px solid #4b4327;border-radius:13px;padding:16px;margin-top:14px}.result .big{font-size:30px;font-weight:900;letter-spacing:-.7px;color:var(--yellow);line-height:1.2}.result .small{font-size:12px;color:var(--muted);margin-top:5px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.kpi{background:var(--panel2);border-radius:11px;padding:12px}.kpi span{font-size:11px;color:var(--muted);display:block}.kpi strong{font-size:17px;display:block;margin-top:4px;overflow-wrap:anywhere}
+.item,.history{padding:12px 0;border-bottom:1px solid var(--line)}.item:last-child,.history:last-child{border-bottom:0}.itemtop{display:flex;justify-content:space-between;gap:10px}.itemname{font-weight:800}.meta{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}.pill{font-size:10px;color:var(--yellow);border:1px solid #66572b;border-radius:99px;padding:4px 7px;height:max-content;white-space:nowrap}.empty{color:var(--muted);font-size:13px;text-align:center;padding:22px 8px}.tiny{font-size:11px;color:var(--muted);text-align:center;padding:15px 0}.rowbtn{display:flex;gap:8px}.rowbtn .btn{flex:1}.inlinebtn{border:1px solid #4a5058;background:#2b3036;color:#eee;border-radius:8px;padding:7px 9px;font-size:11px}
+@media(min-width:560px){.grid{grid-template-columns:1fr 1fr 1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">INDUSTRIAL TOOLKIT</div>
+  <div class="title">KALKULATOR BAUT</div>
+  <div class="subtitle">BY RIZKY ABDILAH · Hitung cepat, data rapi.</div>
+  <div class="status"><span class="dot"></span> MODE OFFLINE · DATA TERSIMPAN DI HP</div>
+</header>
+<nav>
+  <button class="active" data-page="calc">⚖️ Kalkulator</button>
+  <button data-page="items">📦 Data Barang</button>
+  <button data-page="history">🕘 Riwayat</button>
+</nav>
+<main>
+<section id="calc" class="page active">
+  <div class="card">
+    <h2>Berat → Jumlah PCS</h2>
+    <div class="hint">Masukkan berat total dan berat satuan. Gunakan gram per pcs untuk hasil yang akurat.</div>
+    <label>Nama barang (opsional)</label><input id="calcName" placeholder="Contoh: Baut M8 x 20">
+    <div class="grid">
+      <div><label>Berat total (kg)</label><input id="totalKg" type="number" min="0" step="any" placeholder="Mis. 2.5"></div>
+      <div><label>Berat 1 pcs (gram)</label><input id="pieceGram" type="number" min="0" step="any" placeholder="Mis. 4.2"></div>
+    </div>
+    <button class="btn" id="calcBtn">HITUNG JUMLAH PCS</button>
+    <div id="calcResult" class="result" hidden>
+      <div class="small">ESTIMASI JUMLAH BARANG</div><div class="big" id="pcsResult">0 PCS</div>
+      <div class="small" id="calcDetail"></div>
+      <div class="kpis"><div class="kpi"><span>Berat total</span><strong id="kKg">—</strong></div><div class="kpi"><span>Berat satuan</span><strong id="kGram">—</strong></div></div>
+      <button class="btn secondary" id="saveHistory">SIMPAN KE RIWAYAT</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Hitung berat satuan</h2>
+    <div class="hint">Kalau tahu jumlah pcs dari sampel, hitung rata-rata berat tiap pcs.</div>
+    <div class="grid">
+      <div><label>Berat sampel (gram)</label><input id="sampleGram" type="number" min="0" step="any" placeholder="Mis. 250"></div>
+      <div><label>Jumlah sampel (pcs)</label><input id="samplePcs" type="number" min="1" step="1" placeholder="Mis. 100"></div>
+    </div>
+    <button class="btn secondary" id="sampleBtn">HITUNG BERAT PER PCS</button>
+    <div id="sampleResult" class="meta" style="margin-top:12px"></div>
+  </div>
+</section>
+<section id="items" class="page">
+  <div class="card">
+    <h2>Tambah data barang</h2><div class="hint">Simpan nama dan berat satuan agar tidak perlu mengetik ulang.</div>
+    <label>Nama barang</label><input id="itemName" placeholder="Contoh: Ring plat M6">
+    <div class="grid">
+      <div><label>Ukuran / tipe</label><input id="itemType" placeholder="M6 / 1 x 1/2"></div>
+      <div><label>Berat per pcs (gram)</label><input id="itemGram" type="number" min="0" step="any" placeholder="Mis. 1.85"></div>
+    </div>
+    <button class="btn" id="addItem">SIMPAN BARANG</button>
+  </div>
+  <div class="card"><h2>Daftar barang</h2><div class="hint">Tekan “Pakai” untuk mengisi kalkulator dengan data barang.</div><div id="itemList"></div></div>
+</section>
+<section id="history" class="page">
+  <div class="card"><h2>Riwayat perhitungan</h2><div class="hint">Riwayat disimpan lokal di browser HP ini.</div><div id="historyList"></div><button class="btn danger" id="clearHistory">HAPUS SEMUA RIWAYAT</button></div>
+</section>
+<div class="tiny">BY RIZKY ABDILAH · Kalkulator Baut Offline</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const get=(k,d=[])=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+let items=get('kb_items'), historyData=get('kb_history'), latest=null;
+const fmt=(n,d=2)=>Number(n).toLocaleString('id-ID',{maximumFractionDigits:d});
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===b.dataset.page));renderItems();renderHistory()}));
+$('calcBtn').onclick=()=>{
+ const kg=Number($('totalKg').value), gram=Number($('pieceGram').value);
+ if(!(kg>0)||!(gram>0)){alert('Isi berat total (kg) dan berat per pcs (gram) dengan angka lebih dari nol.');return}
+ const pcs=Math.floor(kg*1000/gram), rem=kg*1000-pcs*gram;
+ latest={name:$('calcName').value.trim()||'Barang tanpa nama',kg,gram,pcs,rem,date:new Date().toISOString()};
+ $('pcsResult').textContent=fmt(pcs,0)+' PCS';$('calcDetail').textContent='Sisa berat perkiraan: '+fmt(rem,3)+' gram · hasil estimasi berdasarkan berat rata-rata.';
+ $('kKg').textContent=fmt(kg)+' kg';$('kGram').textContent=fmt(gram,4)+' g/pcs';$('calcResult').hidden=false;
+};
+$('saveHistory').onclick=()=>{if(!latest)return;historyData.unshift(latest);historyData=historyData.slice(0,200);set('kb_history',historyData);renderHistory();alert('Perhitungan tersimpan di riwayat HP ini.')};
+$('sampleBtn').onclick=()=>{let g=Number($('sampleGram').value),p=Number($('samplePcs').value);if(!(g>0)||!(p>0)){alert('Isi berat sampel dan jumlah pcs.');return}$('sampleResult').textContent='Berat rata-rata: '+fmt(g/p,5)+' gram/pcs';$('pieceGram').value=(g/p).toFixed(5)};
+$('addItem').onclick=()=>{let name=$('itemName').value.trim(),type=$('itemType').value.trim(),gram=Number($('itemGram').value);if(!name||!(gram>0)){alert('Nama barang dan berat per pcs wajib diisi.');return}items.unshift({id:Date.now(),name,type,gram});set('kb_items',items);$('itemName').value='';$('itemType').value='';$('itemGram').value='';renderItems();alert('Data barang tersimpan.')};
+function useItem(id){let x=items.find(i=>i.id===id);if(!x)return;$('calcName').value=x.name+(x.type?' '+x.type:'');$('pieceGram').value=x.gram;document.querySelector('[data-page="calc"]').click();window.scrollTo({top:0,behavior:'smooth'})}
+function deleteItem(id){if(!confirm('Hapus data barang ini?'))return;items=items.filter(i=>i.id!==id);set('kb_items',items);renderItems()}
+function renderItems(){let el=$('itemList');if(!items.length){el.innerHTML='<div class="empty">Belum ada data barang. Tambahkan barang pertama di atas.</div>';return}el.innerHTML=items.map(i=>`<div class="item"><div class="itemtop"><div><div class="itemname">${esc(i.name)}</div><div class="meta">${esc(i.type||'Tanpa tipe')} · ${fmt(i.gram,5)} gram/pcs</div></div><span class="pill">TERSIMPAN</span></div><div class="rowbtn"><button class="btn secondary" onclick="useItem(${i.id})">PAKAI</button><button class="btn danger" onclick="deleteItem(${i.id})">HAPUS</button></div></div>`).join('')}
+function renderHistory(){let el=$('historyList');if(!historyData.length){el.innerHTML='<div class="empty">Belum ada riwayat perhitungan.</div>';return}el.innerHTML=historyData.map((h,n)=>`<div class="history"><div class="itemtop"><div><div class="itemname">${esc(h.name)}</div><div class="meta">${new Date(h.date).toLocaleString('id-ID')}<br>${fmt(h.kg)} kg ÷ ${fmt(h.gram,5)} g/pcs</div></div><span class="pill">${fmt(h.pcs,0)} PCS</span></div></div>`).join('')}
+$('clearHistory').onclick=()=>{if(!historyData.length)return;if(confirm('Yakin hapus semua riwayat?')){historyData=[];set('kb_history',historyData);renderHistory()}};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+renderItems();renderHistory();
+</script>
+</body></html>
